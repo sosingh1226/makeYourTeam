@@ -29,7 +29,7 @@ const path = require("path");
 const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "team.html");
+const outputPath = path.join(OUTPUT_DIR, "./output/team.html");
 
 const render = require("./lib/htmlRenderer");
 
@@ -53,11 +53,11 @@ function managerInfo () {
             name: "managerEmail",
             message: "What is your manager's email?",
         },
-            {
-                type: "input",
-                name: "managerOfficeNumber",
-                message: "What is your manager's office number?",
-        },
+        {
+            type: "input",
+            name: "managerOfficeNumber",
+            message: "What is your manager's office number?",
+        }
     ])
     .then (data =>{
         console.log (data);
@@ -67,8 +67,34 @@ function managerInfo () {
     })
 }
 managerInfo();
+inputEmployee();
 
+function inputEmployee (){
+    inquirer.prompt([
+        {
+        type: "list",
+        message: "choose a job title",
+        name: "jobTitleInput",
+        choices: [
+            "engineer",
+            "manager",
+            "intern",
+        ]
+        },
+    ])
+    .then((res) => {
+        console.log(res);
 
+    ​if (res.jobTitleInput === "engineer"){
+        engineerInfo();
+    } else if (res.jobTitleInput === "manager"){
+        managerInfo();
+    } else if (res.jobTitleInput === "intern"){
+        internInfo();
+    };
+    });
+    };
+    
 function engineerInfo () {
     console.log ("taking engineer info")
     inquirer.prompt([
@@ -100,7 +126,6 @@ function engineerInfo () {
         teamMembers.push(engineer);
     })
 }
-engineerInfo();
 
 function internInfo () {
     console.log ("taking intern info")
@@ -133,4 +158,13 @@ function internInfo () {
         teamMembers.push(intern);
     })
 }
-internInfo();
+
+// Function to take gathered information and create html file using the htmlRender.js
+function output() {
+    fs.writeFile(outputPath, render(teamMember), function (err) {
+      if (err) {
+        return console.log(err);
+      }
+      console.log("Success!");
+    })
+  }
