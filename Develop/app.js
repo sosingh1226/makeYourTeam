@@ -29,11 +29,39 @@ const path = require("path");
 const fs = require("fs");
 
 const OUTPUT_DIR = path.resolve(__dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "./output/team.html");
+const outputPath = path.join(OUTPUT_DIR, "./team.html");
 
 const render = require("./lib/htmlRenderer");
 
 const teamMembers = [];
+
+function inputEmployee (){
+    inquirer.prompt([
+        {
+        type: "list",
+        message: "choose a job title",
+        name: "jobTitleInput",
+        choices: [
+            "engineer",
+            "manager",
+            "intern",
+        ]
+        },
+    ])
+    .then((res) => {
+    console.log(res);
+    if (res.jobTitleInput === "engineer"){
+    engineerInfo();
+    } else if (res.jobTitleInput === "manager"){
+    managerInfo();
+    }else if (res.jobTitleInput === "intern")
+    internInfo();
+    });
+
+    // addMore();
+}
+
+inputEmployee();
 
 function managerInfo () {
     console.log ("taking manager info")
@@ -64,35 +92,11 @@ function managerInfo () {
         const manager = new Manager(data.managerName, data.managerId, data.managerEmail, data.managerOfficeNumber)
         console.log (manager);
         teamMembers.push(manager);
+        output();
     })
-
+    
 }
 
-inputEmployee();
-
-function inputEmployee (){
-    inquirer.prompt([
-        {
-        type: "list",
-        message: "choose a job title",
-        name: "jobTitleInput",
-        choices: [
-            "engineer",
-            "manager",
-            "intern",
-        ]
-        },
-    ])
-    .then((res) => {
-        console.log(res);
-    if (res.jobTitleInput === "engineer")
-        engineerInfo();
-    else if (res.jobTitleInput === "manager")
-        managerInfo();
-    else if (res.jobTitleInput === "intern")
-        internInfo();
-    });
-}
 
 function engineerInfo () {
     console.log ("taking engineer info")
@@ -122,9 +126,19 @@ function engineerInfo () {
         console.log (data);
         const engineer = new Engineer(data.engineerName, data.engineerId, data.engineerEmail, data.engineerGithub)
         console.log (engineer);
+        console.log(data.engineerName);
+        console.log(data.engineerId);
+        console.log(data.engineerEmail);
+        console.log(data.engineerGithub);
+
         teamMembers.push(engineer);
+
+        console.log(teamMembers)
+
+        output();
     })
 
+    
 };
 
 function internInfo () {
@@ -156,36 +170,39 @@ function internInfo () {
         const intern = new Intern(data.internName, data.internId, data.internEmail, data.internGithub)
         console.log (intern);
         teamMembers.push(intern);
+
+        output();
     });
+    
     
 };
 
-function addMore (){
+function addMore () {
     inquirer.prompt([
-        {
-        type: "confirm",
-        message: "add more employees?",
-        name: "confirmEmployee",
-        default: true
-        }])
-        .then((ans) => {
-        console.log(yes);
+    {
+    type: "confirm",
+    message: "add more employees?",
+    name: "confirmEmployee",
+    default: true
+    }])
+    .then((ans) => {
+    // console.log(yes);
     if (ans.confirmEmployee === true){
     inputEmployee();
     } else {
-        // output();
+    output();
     return "done";
     }
 })
+}
 
 
 // Function to take gathered information and create html file using the htmlRender.js
-function output() {
-    fs.writeFile(outputPath, render(teamMember), function (err) {
+function output () {
+    fs.writeFile(outputPath, render(teamMembers), function (err) {
     if (err) {
     return console.log(err);
     }
     console.log("Success!");
     })
-    addMore();
-}}
+}
