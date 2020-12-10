@@ -57,8 +57,6 @@ function inputEmployee (){
     }else if (res.jobTitleInput === "intern")
     internInfo();
     });
-
-    // addMore();
 }
 
 inputEmployee();
@@ -92,6 +90,8 @@ function managerInfo () {
         const manager = new Manager(data.managerName, data.managerId, data.managerEmail, data.managerOfficeNumber)
         console.log (manager);
         teamMembers.push(manager);
+
+        addMore();
         output();
     })
     
@@ -125,16 +125,11 @@ function engineerInfo () {
     .then (data =>{
         console.log (data);
         const engineer = new Engineer(data.engineerName, data.engineerId, data.engineerEmail, data.engineerGithub)
-        console.log (engineer);
-        console.log(data.engineerName);
-        console.log(data.engineerId);
-        console.log(data.engineerEmail);
-        console.log(data.engineerGithub);
-
         teamMembers.push(engineer);
 
         console.log(teamMembers)
 
+        addMore();
         output();
     })
 
@@ -171,6 +166,7 @@ function internInfo () {
         console.log (intern);
         teamMembers.push(intern);
 
+        addMore();
         output();
     });
     
@@ -199,6 +195,7 @@ function addMore () {
 
 // Function to take gathered information and create html file using the htmlRender.js
 function output () {
+
     fs.writeFile(outputPath, render(teamMembers), function (err) {
     if (err) {
     return console.log(err);

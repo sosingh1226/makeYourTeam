@@ -7,11 +7,6 @@ class Engineer extends Employee {
     {
         super(name, id, email);
         this.github = github;
-        console.log("engineer obj instantiated...");
-        console.log(name);
-        console.log(id);
-        console.log(email);
-        console.log(github);
 
     }
 
