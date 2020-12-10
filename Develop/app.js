@@ -44,9 +44,9 @@ function managerInfo () {
         message: "What is your manager's name?",
         },
         {
-            type: "input",
-            name: "managerId",
-            message: "What is your manager's ID?",
+        type: "input",
+        name: "managerId",
+        message: "What is your manager's ID?",
         },
         {
             type: "input",
@@ -65,8 +65,9 @@ function managerInfo () {
         console.log (manager);
         teamMembers.push(manager);
     })
+
 }
-managerInfo();
+
 inputEmployee();
 
 function inputEmployee (){
@@ -84,17 +85,15 @@ function inputEmployee (){
     ])
     .then((res) => {
         console.log(res);
-
-    ​if (res.jobTitleInput === "engineer"){
+    if (res.jobTitleInput === "engineer")
         engineerInfo();
-    } else if (res.jobTitleInput === "manager"){
+    else if (res.jobTitleInput === "manager")
         managerInfo();
-    } else if (res.jobTitleInput === "intern"){
+    else if (res.jobTitleInput === "intern")
         internInfo();
-    };
     });
-    };
-    
+}
+
 function engineerInfo () {
     console.log ("taking engineer info")
     inquirer.prompt([
@@ -114,9 +113,9 @@ function engineerInfo () {
             message: "What is your engineer's email?",
         },
             {
-                type: "input",
-                name: "engineerGithub",
-                message: "What is your engineer's GitHub username?",
+            type: "input",
+            name: "engineerGithub",
+            message: "What is your engineer's GitHub username?",
         },
     ])
     .then (data =>{
@@ -125,7 +124,8 @@ function engineerInfo () {
         console.log (engineer);
         teamMembers.push(engineer);
     })
-}
+
+};
 
 function internInfo () {
     console.log ("taking intern info")
@@ -156,15 +156,36 @@ function internInfo () {
         const intern = new Intern(data.internName, data.internId, data.internEmail, data.internGithub)
         console.log (intern);
         teamMembers.push(intern);
-    })
-}
+    });
+    
+};
+
+function addMore (){
+    inquirer.prompt([
+        {
+        type: "confirm",
+        message: "add more employees?",
+        name: "confirmEmployee",
+        default: true
+        }])
+        .then((ans) => {
+        console.log(yes);
+    if (ans.confirmEmployee === true){
+    inputEmployee();
+    } else {
+        // output();
+    return "done";
+    }
+})
+
 
 // Function to take gathered information and create html file using the htmlRender.js
 function output() {
     fs.writeFile(outputPath, render(teamMember), function (err) {
-      if (err) {
-        return console.log(err);
-      }
-      console.log("Success!");
+    if (err) {
+    return console.log(err);
+    }
+    console.log("Success!");
     })
-  }
+    addMore();
+}}
